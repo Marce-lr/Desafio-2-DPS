@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Calendar } from "react-native-calendars";
 import Icon from "react-native-vector-icons/FontAwesome";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function RegistroPiezaScreen(props) {
   const [pieza, setPieza] = useState("");
@@ -17,9 +18,29 @@ export default function RegistroPiezaScreen(props) {
   const [fechaCambio, setFechaCambio] = useState(new Date().toDateString());
   const [showCalendar, setShowCalendar] = useState(false);
 
-  const handleGuardar = () => {
-    console.log("Pieza guardada:", { pieza, marca, numeroSerie, fechaCambio });
-    props.navigation.goBack();
+  const handleGuardar = async () => {
+    const newPieza = { pieza, marca, numeroSerie, fechaCambio };
+
+    // Obtener las piezas almacenadas previamente
+    const piezasData = await AsyncStorage.getItem("piezas");
+    const piezas = piezasData ? JSON.parse(piezasData) : [];
+
+    // Agregar la nueva pieza a la lista
+    piezas.push(newPieza);
+
+    // Guardar nuevamente la lista en AsyncStorage
+    await AsyncStorage.setItem("piezas", JSON.stringify(piezas));
+
+    console.log("Pieza guardada:", newPieza);
+
+    // Limpiar los campos
+    setPieza("");
+    setMarca("");
+    setNumeroSerie("");
+    setFechaCambio(new Date().toDateString());
+
+    // Volver a la pantalla anterior y actualizar automáticamente
+    props.navigation.navigate("piezas"); // Asegúrate de que la pantalla se recargue
   };
 
   const handleCancelar = () => {
@@ -201,5 +222,5 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "600",
     textAlign: "center",
-  },
+  },
 });

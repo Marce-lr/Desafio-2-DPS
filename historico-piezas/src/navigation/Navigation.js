@@ -10,22 +10,23 @@ export default function Navigation() {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerShown: false, // Oculta los encabezados en las pantallas
+        headerShown: false,
         tabBarStyle: {
-          backgroundColor: "#fff", // Fondo de la barra de pestañas
+          backgroundColor: "#fff",
           borderTopWidth: 1,
-          borderTopColor: "#ddd", // Separador sutil arriba
-          height: 60, // Ajusta la altura
+          borderTopColor: "#ddd",
+          height: 60,
         },
-        tabBarActiveTintColor: "#4CAF50", // Color del ícono cuando está activo
-        tabBarInactiveTintColor: "#777", // Color cuando está inactivo
+        tabBarActiveTintColor: "#4CAF50",
+        tabBarInactiveTintColor: "#777",
       }}
     >
       <Tab.Screen
         name="piezas"
         component={PiezasStack}
         options={{
-          title: "Home",
+          title: "Histórico de Piezas",
+          headerShown: true,
           tabBarIcon: ({ color, size }) => (
             <Icon name="archive" size={size} color={color} />
           ),
@@ -42,5 +43,5 @@ export default function Navigation() {
         }}
       />
     </Tab.Navigator>
-  );
+  );
 }
