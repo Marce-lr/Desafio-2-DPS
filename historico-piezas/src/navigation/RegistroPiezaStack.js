@@ -10,7 +10,7 @@ export default function RegistroPiezaStack() {
       <Stack.Screen
         name="registroPieza"
         component={RegistroPiezaScreen}
-        options={{ title: "Registro de piezas" }} // Título de la pantalla
+        options={{ title: "Registro de piezas" }}
       />
     </Stack.Navigator>
   );
