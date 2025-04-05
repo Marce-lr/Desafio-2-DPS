@@ -1,6 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Modal,
+  StyleSheet,
+} from "react-native";
 import { Calendar } from "react-native-calendars";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 export default function RegistroPiezaScreen(props) {
   const [pieza, setPieza] = useState("");
@@ -52,27 +60,55 @@ export default function RegistroPiezaScreen(props) {
       />
 
       <Text>Fecha de cambio</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Seleccione la fecha"
-        value={fechaCambio}
-        editable={false}
-        onFocus={() => setShowCalendar(true)}
-      />
-
-      {/* Mostrar el calendario solo si es necesario */}
-      {showCalendar && (
-        <Calendar
-          onDayPress={onDayPress}
-          markedDates={{
-            [fechaCambio]: { selected: true, selectedColor: "blue" },
-          }}
+      <View style={styles.dateContainer}>
+        <TextInput
+          style={[styles.input, styles.dateInput]}
+          placeholder="Seleccione la fecha"
+          value={fechaCambio}
+          editable={false}
         />
-      )}
+        <TouchableOpacity
+          onPress={() => setShowCalendar(true)}
+          style={styles.iconContainer}
+        >
+          <Icon name="calendar" size={20} color="black" />
+        </TouchableOpacity>
+      </View>
+
+      {/* MODAL DEL CALENDARIO */}
+      <Modal visible={showCalendar} transparent={true} animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Seleccione una fecha</Text>
+
+            <Calendar
+              onDayPress={onDayPress}
+              markedDates={{
+                [fechaCambio]: { selected: true, selectedColor: "blue" },
+              }}
+            />
+
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setShowCalendar(false)}
+            >
+              <Text style={styles.closeButtonText}>Cerrar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       <View style={styles.buttonContainer}>
-        <Button title="Guardar" onPress={handleGuardar} />
-        <Button title="Cancelar" onPress={handleCancelar} />
+        <TouchableOpacity style={styles.buttonGuardar} onPress={handleGuardar}>
+          <Text style={styles.buttonText}>Guardar</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.buttonCancelar}
+          onPress={handleCancelar}
+        >
+          <Text style={styles.buttonText}>Cancelar</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -83,10 +119,12 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     justifyContent: "center",
+    backgroundColor: "#f4f4f9",
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: "600",
+    color: "#333",
     marginBottom: 20,
     textAlign: "center",
   },
@@ -96,9 +134,72 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 15,
     paddingHorizontal: 10,
+    borderRadius: 5,
+  },
+  dateContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
+  },
+  dateInput: {
+    flex: 1,
+    paddingRight: 35,
+  },
+  iconContainer: {
+    position: "absolute",
+    right: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: 10,
+  },
+  closeButton: {
+    marginTop: 20,
+    backgroundColor: "#D32F2F",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 15,
+  },
+  buttonGuardar: {
+    backgroundColor: "#4CAF50",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
+  buttonCancelar: {
+    backgroundColor: "#D32F2F",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
+  buttonText: {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "600",
+    textAlign: "center",
   },
 });
